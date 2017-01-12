@@ -21,6 +21,7 @@ var presionados = [];
 			presionados = []; //limpiar memoria de presionados
 			numeros = 0;
 			numerosOrd = 0;
+			$('.overlay').html('');
 		}
 
 
