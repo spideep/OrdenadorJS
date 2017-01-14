@@ -1,6 +1,7 @@
 var presionados = [];
-var numeros = "";
+var numeros = 0;
 var numerosOrd = "";
+var end = false;
 
 $('.ordenadorIngreso').on('keypress', function (e) {
 	if(e.which < 48 || 57 < e.which || presionados.includes(e.which)) {
@@ -20,6 +21,7 @@ var resetear = function(){
 	presionados = []; //limpiar memoria de presionados
 	numeros = 0;
 	numerosOrd = 0;
+	end = false;
 	$('.overlay').hide().html('');
 }
 
@@ -57,20 +59,11 @@ var animateArr = function(arr,x){
 	arrIndexCallBack(arr, x, function(){		
 		//lets increment the index to keep this working (>>next is coming)
 		x++; 
-		
 		if(x < arr.length) { //if true means there is still work to do
       animateArr(arr,x);
-    } else { //the iteration reach the last array element
-    	
-    	//So lets check if the work til this point has been enough to get the array sorted
-    	if(!compareArrays(numeros,numerosOrd)){
-				x=0;
-				animateArr(arr,x);
-			} else {
-				//Yes, the worked array and the sorted one are both equals
-				console.log("Thanks for your patience");
-			}
-
+    } else if (!compareArrays(numeros,numerosOrd)) { //the iteration reached the last array element //So lets check if the work til this point has been enough to get the array sorted
+    	x=0;
+			animateArr(arr,x);
     }
 	});
 }
@@ -84,13 +77,19 @@ var arrIndexCallBack = function(arr, x ,callback){
 		var vanterior = $anterior.find('span').text();
 				
 		//Si el valor de indice anterior es mayor al valor del indice actual
-		if(vactual < vanterior) { 
+		if(vactual < vanterior) {
+			console.log('ordenando...');
 			var t = vactual;
 
 			//actualizando array
 			numeros[x] = vanterior;
 			numeros[x-1] = t;
 
+			if(compareArrays(numeros,numerosOrd)) {
+				end = true;
+			}
+
+			//Para Animación
 			vactual = vanterior;
 			vanterior = t;
 
@@ -98,31 +97,33 @@ var arrIndexCallBack = function(arr, x ,callback){
 				$(this).text(vactual).fadeIn('fast', function(){
 					$anterior.find('span').fadeOut('fast', function(){
 						$(this).text(vanterior).fadeIn('fast', function(){
-							callback();
-							console.log(numeros);
-							x=0;
+							
+							if(!end) {
+								callback();
+							} else {
+								endFunc('105');
+							}
+			
 						});
 					});
 				});
 			});	
-			
 		} else {
-			x++;
-			//comparando si el array transformado es igual al array ordenado (que es el objetivo final)
-			if(!compareArrays(numeros,numerosOrd)){
-				console.log('aun no es igual');
-				x=0;
-				callback();
-			} else {
-				console.log(119);
-				console.log("FIN");
-			}
+			console.log('en orden');
+			x = 0;
+			callback();
 		}		
 	}
 	else {
-		console.log('inicio');
+		console.log('re-inicio');
 		callback();
 	}
+}
+
+var endFunc = function(msg){
+	console.log("Thank you for being patient " + msg);
+	console.log(numeros);
+	console.log(numerosOrd);
 }
 
 var sortNumber = function (a,b) {

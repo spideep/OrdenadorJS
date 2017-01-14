@@ -6,7 +6,9 @@
     font-weight: bold;
     font-size: 36px;
 }
-
+.red {
+    color: red;
+}
 .overlay {
     border: 1px dashed #ccc;
     margin: auto;
