@@ -27,8 +27,9 @@ var presionados = [];
 
 		//Acción: Ordenar
 		$('.sortButton').on('click', function(event) {
+
 			$('.overlay').fadeIn('200');
-			if(numeros==0){
+			if(numeros == 0){
 				numeros = $('.ordenadorIngreso').val();
 				numeros = numeros.split('');
 				numerosOrd = $('.ordenadorIngreso').val().split('');
@@ -36,20 +37,24 @@ var presionados = [];
 				console.log("numerosOrd",numerosOrd);
 			}
 
+			if(!compareArrays(numeros,numerosOrd)) { //si el array inicial no está ordendo
+				/*Mostrar*/
+				mostrarNums(numeros);
 
-			/*Mostrar*/
-			mostrarNums(numeros);
-
-			var x = 0;
-			var v = 0;
-			animateArr(numeros,x);
+				var x = 0;
+				var v = 0;
+				animateArr(numeros,x);
+			} else {
+				alert('Esta serie no necesita ser ordenada');
+			}
 
 		});
 
 		var mostrarNums = function(arrNums) {
-			$('.overlay').html('');
+			var $contenedor = $('.overlay');
+			$contenedor.html('');
 			for (var i = 0; i < arrNums.length; i++) {
-				$('.overlay').append('<div><span>' + arrNums[i] + '</span></div>');
+				$contenedor.append('<div><span>' + arrNums[i] + '</span></div>');
 			}
 		}
 
@@ -108,13 +113,14 @@ var presionados = [];
 				} else {
 					v++;
 					x++;
-					console.log('AAAA');
-					console.log(numeros);
+					//comparando si el array transformado es igual al array ordenado (que es el objetivo final)
 					if(!compareArrays(numeros,numerosOrd)){
+						console.log('aun no es igual');
 						x=0;
 						v=0;
 						callback();
 					} else {
+						console.log(119);
 						console.log("FIN");
 					}
 				}
@@ -127,7 +133,7 @@ var presionados = [];
 			}
 		}
 
-		function sortNumber(a,b) {
+		var sortNumber = function (a,b) {
 	    return a - b;
 		}
 
