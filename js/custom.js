@@ -1,7 +1,6 @@
 var presionados = [];
 var numeros = "";
 var numerosOrd = "";
-var v= "";
 
 $('.ordenadorIngreso').on('keypress', function (e) {
 	if(e.which < 48 || 57 < e.which || presionados.includes(e.which)) {
@@ -43,7 +42,6 @@ $('.sortButton').on('click', function(event) {
 
 		//seteando valores iniciales
 		var x = 0;
-		var v = 0;
 		animateArr(numeros,x);
 
 	} else {
@@ -52,25 +50,27 @@ $('.sortButton').on('click', function(event) {
 
 });
 
+//The Animation Process
 var animateArr = function(arr,x){
-	arrIndexCallBack(arr, x, function(){
+	
+	//Lets do samething with passed variables
+	arrIndexCallBack(arr, x, function(){		
+		//lets increment the index to keep this working (>>next is coming)
+		x++; 
 		
-		x++;
-		v++;
-		
-		if(x < arr.length) {
+		if(x < arr.length) { //if true means there is still work to do
       animateArr(arr,x);
-      v=0;
-    } else {
-    	console.log('terminó: la iteración');
+    } else { //the iteration reach the last array element
+    	
+    	//So lets check if the work til this point has been enough to get the array sorted
     	if(!compareArrays(numeros,numerosOrd)){
 				x=0;
-				v=0;
 				animateArr(arr,x);
 			} else {
-				console.log("FIN");
+				//Yes, the worked array and the sorted one are both equals
+				console.log("Thanks for your patience");
 			}
-    	// resetear();
+
     }
 	});
 }
@@ -107,21 +107,17 @@ var arrIndexCallBack = function(arr, x ,callback){
 			});	
 			
 		} else {
-			v++;
 			x++;
 			//comparando si el array transformado es igual al array ordenado (que es el objetivo final)
 			if(!compareArrays(numeros,numerosOrd)){
 				console.log('aun no es igual');
 				x=0;
-				v=0;
 				callback();
 			} else {
 				console.log(119);
 				console.log("FIN");
 			}
-		}
-
-		
+		}		
 	}
 	else {
 		console.log('inicio');
